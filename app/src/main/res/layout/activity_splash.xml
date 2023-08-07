@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="Sample"
+            android:text="CHATGPT"
             android:textSize="30dp"
             android:layout_centerInParent="true"
             android:layout_height="wrap_content"/>

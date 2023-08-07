@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="Button" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:textColor">#000000</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:background">@drawable/primary_round</item>
+    </style>
+    <style name="Button2" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:textColor">#000000</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:background">@drawable/primary_round2</item>
+    </style>
+
+</resources>

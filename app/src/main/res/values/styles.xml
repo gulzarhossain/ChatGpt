@@ -18,5 +18,8 @@
         <item name="android:textSize">12dp</item>
         <item name="android:background">@drawable/primary_round2</item>
     </style>
-
+    <style name="CustomPopUpStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:itemBackground">@color/black</item>
+    </style>
 </resources>

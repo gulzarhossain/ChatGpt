@@ -10,8 +10,9 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="CHATGPT"
-            android:textSize="30dp"
+            android:fontFamily="@font/cherry"
+            android:text="CHATgpt"
+            android:textSize="40dp"
             android:layout_centerInParent="true"
             android:layout_height="wrap_content"/>
     </RelativeLayout>

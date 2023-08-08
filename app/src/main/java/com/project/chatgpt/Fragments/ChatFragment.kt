@@ -3,7 +3,6 @@ package com.project.chatgpt.Fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,7 @@ class ChatFragment(val mcontext: Context) : Fragment() {
     val myRef = database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
     var keym:String=""
     lateinit var adapterUser: AdapterUser
-    val list:ArrayList<UserData> = ArrayList()
+    val list = ArrayList<UserData>()
     lateinit var ncontext:Context
 
     override fun onAttach(context: Context) {
@@ -50,13 +49,13 @@ class ChatFragment(val mcontext: Context) : Fragment() {
         firebaseAuth= FirebaseAuth.getInstance()
         googleSignInClient= GoogleSignIn.getClient(requireContext().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)
 
-        binding.bt.setOnClickListener {
+//        binding.bt.setOnClickListener {
 //            firebaseAuth.signOut()
 //            googleSignInClient.signOut().addOnCompleteListener {
 //                startActivity(Intent(requireContext().applicationContext, Login::class.java))
 //            }
-            Log.e("pos",list.size.toString())
-        }
+//            Log.e("pos",list.size.toString())
+//        }
         return binding.root
     }
 
@@ -66,38 +65,62 @@ class ChatFragment(val mcontext: Context) : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 for (snap in snapshot.child("users").children){
-                    if (!snap.key.equals(AppPreferences.getUserName(requireContext().applicationContext))) {
-                        myRef.child("chat").addListenerForSingleValueEvent(object :
-                            ValueEventListener {
-                            override fun onDataChange(snapshot2: DataSnapshot) {
-                                var b=false
-                                var i=0
-                                if (snapshot2.childrenCount>0){
-                                    for (snap2 in snapshot2.children){
-                                        val user1=snap2.child("user_1").value.toString()
-                                        val user2=snap2.child("user_2").value.toString()
-                                        if (user1.equals(AppPreferences.getUserName(requireContext().applicationContext)) &&
-                                            user2.equals(snap.key.toString()) || user1.equals(snap.key.toString()) &&
-                                            user2.equals(AppPreferences.getUserName(requireContext().applicationContext))){
-                                            keym=snap2.key.toString()
-                                            i++
-                                            b=true
-                                        }else{
-                                            i++
-                                            if (i==snapshot2.childrenCount.toInt()){
-                                                if (!b)keym=""
+                    if (!snap.key.equals(AppPreferences.getUserName(requireContext().applicationContext).replace(".",""))) {
+                        if (snap.child("friendlist").value.toString().contains(
+                                AppPreferences.getUserName(requireContext().applicationContext)
+                                    .replace(".", "")
+                            )
+                        ) {
+                            myRef.child("chat").addListenerForSingleValueEvent(object :
+                                ValueEventListener {
+                                override fun onDataChange(snapshot2: DataSnapshot) {
+                                    var b = false
+                                    var i = 0
+                                    if (snapshot2.childrenCount > 0) {
+                                        for (snap2 in snapshot2.children) {
+                                            val user1 = snap2.child("user_1").value.toString()
+                                            val user2 = snap2.child("user_2").value.toString()
+                                            if (user1.equals(
+                                                    AppPreferences.getUserName(
+                                                        requireContext().applicationContext
+                                                    )
+                                                ) &&
+                                                user2.equals(snap.key.toString()) || user1.equals(
+                                                    snap.key.toString()
+                                                ) &&
+                                                user2.equals(
+                                                    AppPreferences.getUserName(
+                                                        requireContext().applicationContext
+                                                    )
+                                                )
+                                            ) {
+                                                keym = snap2.key.toString()
+                                                i++
+                                                b = true
+                                            } else {
+                                                i++
+                                                if (i == snapshot2.childrenCount.toInt()) {
+                                                    if (!b) keym = ""
+                                                }
                                             }
                                         }
+                                    } else {
+                                        keym = ""
                                     }
-                                }else{
-                                    keym=""
+                                    list.add(
+                                        UserData(
+                                            snap.key!!,
+                                            snap.child("pic").value.toString(),
+                                            keym
+                                        )
+                                    )
+                                    adapterUser.notifyDataSetChanged()
                                 }
-                                list.add(UserData(snap.key!!,snap.child("pic").value.toString(),keym))
-                                adapterUser.notifyDataSetChanged()
-                            }
-                            override fun onCancelled(error: DatabaseError) {
-                            }
-                        })
+
+                                override fun onCancelled(error: DatabaseError) {
+                                }
+                            })
+                        }
                     }
                 }
             }

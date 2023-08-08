@@ -5,9 +5,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +44,7 @@ class Chat : AppCompatActivity() {
         msgAdapter= MsgAdapter(this, msglist)
         binding.rvmsg.adapter=msgAdapter
 
-        binding.name.text=userdata!!.name
+        binding.name.text=userdata!!.name.replace("@gmailcom","")
         Glide.with(this@Chat).load(userdata.pic).placeholder(R.drawable.round_person_2_24).into(binding.img)
 
         binding.btback.setOnClickListener {
@@ -101,11 +99,6 @@ class Chat : AppCompatActivity() {
             }
         }
 
-        binding.btrecording.setOnTouchListener(object :OnTouchListener{
-            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-                TODO("Not yet implemented")
-            }
-        })
     }
     fun popup(pos:Int, view: View){
        popupMenu = PopupMenu(this@Chat,view)

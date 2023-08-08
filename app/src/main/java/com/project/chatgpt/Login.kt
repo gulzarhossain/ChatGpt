@@ -68,7 +68,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
             override fun onSuccess(result: LoginResult) {
                 val graphRequest = GraphRequest.newMeRequest(result.accessToken){ `object`, response ->
                     Log.e("dsfj",`object`!!.getString("picture"))
-                    val jsonObject:JSONObject= JSONObject(`object`!!.getString("picture"))
+                    val jsonObject= JSONObject(`object`!!.getString("picture"))
                     Log.e("picture",jsonObject.getJSONObject("data").getString("url"))
                     Glide.with(this@Login)
                         .load("https://graph.facebook.com/"+`object`.getString("id")+"/picture?type=large")
@@ -144,8 +144,8 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                         this@Login,
                                         task.result.email.toString()
                                     )
-                                    val intent: Intent =
-                                        Intent(this@Login, MainActivity::class.java)
+                                    val intent =
+                                        Intent(this@Login, Home::class.java)
                                     intent.putExtra("acc", task.result.displayName)
                                     startActivity(intent)
                                 } else {
@@ -162,8 +162,8 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     myRef.child("users")
                                         .child(task.result.email.toString().replace(".", ""))
                                         .child("email").setValue(task.result.email.toString())
-                                    val intent: Intent =
-                                        Intent(this@Login, MainActivity::class.java)
+                                    val intent =
+                                        Intent(this@Login, Home::class.java)
                                     intent.putExtra("acc", task.result.email)
                                     startActivity(intent)
                                 }
@@ -199,7 +199,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 this@Login,
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
                             )
-                            val intent: Intent = Intent(this@Login, MainActivity::class.java)
+                            val intent: Intent = Intent(this@Login, Home::class.java)
                             intent.putExtra(
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
@@ -224,7 +224,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 .child("email")
                                 .setValue(firebaseAuth.currentUser!!.email.toString())
 
-                            val intent: Intent = Intent(this@Login, MainActivity::class.java)
+                            val intent: Intent = Intent(this@Login, Home::class.java)
                             intent.putExtra(
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)

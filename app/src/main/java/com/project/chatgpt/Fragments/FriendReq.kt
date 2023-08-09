@@ -27,8 +27,6 @@ class FriendReq(val mcontext: Context) : Fragment() {
     val database = Firebase.database
     val myRef = database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
     var friendlist=""
-    var request=""
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_friend_req, container,false)
         adapter= FriendAdapter(this@FriendReq,2,mcontext,list)
@@ -41,10 +39,13 @@ class FriendReq(val mcontext: Context) : Fragment() {
         GetFrnds()
     }
     fun GetFrnds(){
+        binding.rvuser.visibility=View.GONE
+        binding.shim.startShimmer()
+        binding.shim.visibility=View.VISIBLE
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
-                for (snap in snapshot.child("users").children){
+                for (snap  in snapshot.child("users").children){
                     if (snap.key.equals(AppPreferences.getUserName(mcontext).replace(".",""))) {
                         if (snap.hasChild("friendlist")){
                             friendlist=snap.child("friendlist").value.toString()
@@ -79,9 +80,15 @@ class FriendReq(val mcontext: Context) : Fragment() {
                         }
                     }
                 }
+                binding.shim.stopShimmer()
+                binding.shim.visibility=View.GONE
+                binding.rvuser.visibility=View.VISIBLE
             }
 
             override fun onCancelled(error: DatabaseError) {
+                binding.shim.stopShimmer()
+                binding.shim.visibility=View.GONE
+                binding.rvuser.visibility=View.VISIBLE
             }
         })
     }

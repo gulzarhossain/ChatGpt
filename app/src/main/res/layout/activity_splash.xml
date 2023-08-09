@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
@@ -10,6 +11,7 @@
             android:layout_width="match_parent"
             android:gravity="center"
             android:textStyle="bold"
+            android:textColor="@color/purple_700"
             android:fontFamily="@font/cherry"
             android:text="CHATgpt"
             android:textSize="40dp"

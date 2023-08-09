@@ -42,25 +42,104 @@ class FindFriends(val mcontext: Context) : Fragment() {
         getFriends()
     }
     private fun getFriends() {
+        binding.rvuser.visibility=View.GONE
+        binding.shim.startShimmer()
+        binding.shim.visibility=View.VISIBLE
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 for (snap in snapshot.child("users").children){
                     if (!snap.key.equals(AppPreferences.getUserName(mcontext).replace(".",""))) {
-                        if (snap.hasChild("requests")){
-                            if (snap.child("requests").value.toString().contains(AppPreferences.getUserName(mcontext).replace(".",""))){
-                                list.add(FriendData(snap.key.toString(),snap.child("pic").value.toString(),snap.child("requests").value.toString(),"",true))
-                            }else list.add(FriendData(snap.key.toString(),snap.child("pic").value.toString(),"","",false))
+                        if (snap.hasChild("friendlist")) {
+                            if (!snap.child("friendlist").value.toString()
+                                    .contains(AppPreferences.getUserName(mcontext).replace(".", ""))
+                            ) {
+                                if (snap.hasChild("requests")) {
+                                    if (snap.child("requests").value.toString().contains(
+                                            AppPreferences.getUserName(mcontext).replace(".", "")
+                                        )
+                                    ) {
+                                        list.add(
+                                            FriendData(
+                                                snap.key.toString(),
+                                                snap.child("pic").value.toString(),
+                                                snap.child("requests").value.toString(),
+                                                "",
+                                                true
+                                            )
+                                        )
+                                    } else list.add(
+                                        FriendData(
+                                            snap.key.toString(),
+                                            snap.child("pic").value.toString(),
+                                            "",
+                                            "",
+                                            false
+                                        )
+                                    )
 
+                                } else {
+                                    list.add(
+                                        FriendData(
+                                            snap.key!!,
+                                            snap.child("pic").value.toString(),
+                                            "",
+                                            "",
+                                            false
+                                        )
+                                    )
+                                }
+                                adapter.notifyDataSetChanged()
+                            }
                         }else{
-                            list.add(FriendData(snap.key!!,snap.child("pic").value.toString(),"","",false))
+                            if (snap.hasChild("requests")) {
+                                if (snap.child("requests").value.toString().contains(
+                                        AppPreferences.getUserName(mcontext).replace(".", "")
+                                    )
+                                ) {
+                                    list.add(
+                                        FriendData(
+                                            snap.key.toString(),
+                                            snap.child("pic").value.toString(),
+                                            snap.child("requests").value.toString(),
+                                            "",
+                                            true
+                                        )
+                                    )
+                                } else list.add(
+                                    FriendData(
+                                        snap.key.toString(),
+                                        snap.child("pic").value.toString(),
+                                        "",
+                                        "",
+                                        false
+                                    )
+                                )
+
+                            } else {
+                                list.add(
+                                    FriendData(
+                                        snap.key!!,
+                                        snap.child("pic").value.toString(),
+                                        "",
+                                        "",
+                                        false
+                                    )
+                                )
+                            }
+                            adapter.notifyDataSetChanged()
                         }
-                        adapter.notifyDataSetChanged()
                     }
                 }
+                binding.shim.stopShimmer()
+                binding.shim.visibility=View.GONE
+                binding.rvuser.visibility=View.VISIBLE
             }
 
             override fun onCancelled(error: DatabaseError) {
+                binding.shim.stopShimmer()
+                binding.shim.visibility=View.GONE
+                binding.rvuser.visibility=View.VISIBLE
             }
         })
     }

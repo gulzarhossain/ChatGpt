@@ -3,6 +3,7 @@ package com.project.chatgpt.Fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,29 +26,37 @@ import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.databinding.FragmentChatBinding
 
 class ChatFragment(val mcontext: Context) : Fragment() {
-    lateinit var binding:FragmentChatBinding
+    lateinit var binding: FragmentChatBinding
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
 
     val database = Firebase.database
     val myRef = database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
-    var keym:String=""
+    var keym: String = ""
     lateinit var adapterUser: AdapterUser
     val list = ArrayList<UserData>()
-    lateinit var ncontext:Context
+    lateinit var ncontext: Context
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        ncontext=context
+        ncontext = context
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_chat, container, false)
 
-        adapterUser=AdapterUser(ChatFragment(mcontext),ncontext,list)
-        binding.rvuser.adapter=adapterUser
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat, container, false)
 
-        firebaseAuth= FirebaseAuth.getInstance()
-        googleSignInClient= GoogleSignIn.getClient(requireContext().applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN)
+        adapterUser = AdapterUser(ChatFragment(mcontext), ncontext, list)
+        binding.rvuser.adapter = adapterUser
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        googleSignInClient = GoogleSignIn.getClient(
+            requireContext().applicationContext,
+            GoogleSignInOptions.DEFAULT_SIGN_IN
+        )
 
 //        binding.bt.setOnClickListener {
 //            firebaseAuth.signOut()
@@ -64,8 +73,12 @@ class ChatFragment(val mcontext: Context) : Fragment() {
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
-                for (snap in snapshot.child("users").children){
-                    if (!snap.key.equals(AppPreferences.getUserName(requireContext().applicationContext).replace(".",""))) {
+                for (snap in snapshot.child("users").children) {
+                    if (!snap.key.equals(
+                            AppPreferences.getUserName(requireContext().applicationContext)
+                                .replace(".", "")
+                        )
+                    ) {
                         if (snap.child("friendlist").value.toString().contains(
                                 AppPreferences.getUserName(requireContext().applicationContext)
                                     .replace(".", "")
@@ -80,18 +93,18 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                         for (snap2 in snapshot2.children) {
                                             val user1 = snap2.child("user_1").value.toString()
                                             val user2 = snap2.child("user_2").value.toString()
+                                            Log.e("user1",snap2.child("user_1").value.toString())
+                                            Log.e("user2",snap2.child("user_2").value.toString())
+                                            Log.e("NAME",AppPreferences.getUserName(requireContext().applicationContext))
                                             if (user1.equals(
-                                                    AppPreferences.getUserName(
-                                                        requireContext().applicationContext
-                                                    )
-                                                ) &&
+                                                    AppPreferences.getUserName(requireContext().applicationContext).replace(".","")) &&
                                                 user2.equals(snap.key.toString()) || user1.equals(
                                                     snap.key.toString()
                                                 ) &&
                                                 user2.equals(
                                                     AppPreferences.getUserName(
                                                         requireContext().applicationContext
-                                                    )
+                                                    ).replace(".","")
                                                 )
                                             ) {
                                                 keym = snap2.key.toString()
@@ -124,14 +137,15 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                     }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
             }
         })
     }
 
-    fun Click(user: UserData){
+    fun Click(user: UserData) {
         val intent = Intent(mcontext, Chat::class.java)
-        intent.putExtra("Bundle",user)
+        intent.putExtra("Bundle", user)
         mcontext.startActivity(intent)
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
@@ -56,6 +57,8 @@ class Chat : AppCompatActivity() {
 
         genchatkey=userdata.chat_key
 
+        Log.e("KEY",genchatkey)
+
         myRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     msglist.clear()
@@ -91,7 +94,7 @@ class Chat : AppCompatActivity() {
             if (binding.etmsg.text.toString().length>0){
                 val time=System.currentTimeMillis()
                 myRef.child("chat").child(genchatkey.toString()).child("user_1").setValue(
-                    AppPreferences.getUserName(this@Chat))
+                    AppPreferences.getUserName(this@Chat).replace(".",""))
                 myRef.child("chat").child(genchatkey.toString()).child("user_2").setValue(userdata.name)
                 myRef.child("chat").child(genchatkey.toString()).child("messages").child(time.toString()).child("msg").setValue(binding.etmsg.text.toString())
                 myRef.child("chat").child(genchatkey.toString()).child("messages").child(time.toString()).child("name").setValue(AppPreferences.getUserName(this@Chat))

@@ -81,7 +81,6 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
             }
         })
 
-
         binding.btfb.setOnClickListener {
             binding.fbbtn.performClick()
         }
@@ -149,10 +148,8 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     intent.putExtra("acc", task.result.displayName)
                                     startActivity(intent)
                                 } else {
-                                    AppPreferences.setUserName(
-                                        this@Login,
-                                        task.result.email.toString()
-                                    )
+                                    AppPreferences.setUserName(this@Login,
+                                        task.result.email.toString())
                                     myRef.child("users")
                                         .child(task.result.email.toString().replace(".", ""))
                                         .child("name").setValue(task.result.displayName.toString())
@@ -168,7 +165,6 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     startActivity(intent)
                                 }
                             }
-
                             override fun onCancelled(error: DatabaseError) {
 
                             }
@@ -199,7 +195,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 this@Login,
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
                             )
-                            val intent: Intent = Intent(this@Login, Home::class.java)
+                            val intent = Intent(this@Login, Home::class.java)
                             intent.putExtra(
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
@@ -224,7 +220,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 .child("email")
                                 .setValue(firebaseAuth.currentUser!!.email.toString())
 
-                            val intent: Intent = Intent(this@Login, Home::class.java)
+                            val intent = Intent(this@Login, Home::class.java)
                             intent.putExtra(
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)

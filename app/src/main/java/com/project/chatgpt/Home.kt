@@ -16,6 +16,7 @@ import com.project.chatgpt.Adapters.FragmentAdapter
 import com.project.chatgpt.Fragments.ChatFragment
 import com.project.chatgpt.Fragments.FindFriends
 import com.project.chatgpt.Fragments.FriendReq
+import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ActivityHomeBinding
 
 class Home : AppCompatActivity() {
@@ -76,6 +77,10 @@ class Home : AppCompatActivity() {
             pop.menuInflater.inflate(R.menu.popup2,pop.menu)
             pop.show()
         }
+    }
+    fun ChangeTab(){
+        binding.lytab.selectTab(binding.lytab.getTabAt(0))
+        AppUtility.SnacView("Friend Added",binding.lytab)
     }
 
 }

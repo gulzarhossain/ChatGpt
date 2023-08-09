@@ -41,7 +41,7 @@ class FriendAdapter(val frag:Fragment,val g:Int,val context: Context,val list: A
                         binding.bt.text="Add"
                     }else binding.bt.text="Accept"
 
-                binding.name.text= list[position].name
+                binding.name.text= list[position].name.replace("@gmailcom","")
                 Glide.with(context).load(list[position].pic).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(
                     R.drawable.round_person_2_24).listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?,

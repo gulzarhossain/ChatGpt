@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.Utils.AppUtility.APP_VERSION
 import com.project.chatgpt.databinding.ActivitySplashBinding
 
@@ -28,8 +29,13 @@ class Splash : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.child("version").value.toString().toInt()==APP_VERSION){
                     if (open==1){
-                    startActivity(Intent(this@Splash,Login::class.java))
-                    finish()
+                    if (AppPreferences.getUserLoginStatus(this@Splash)){
+                        startActivity(Intent(this@Splash,Home::class.java))
+                        finish()
+                    }else{
+                        startActivity(Intent(this@Splash,Login::class.java))
+                        finish()
+                    }
                         open=0
                     }
                 }else if(snapshot.child("version").value.toString().toInt()==0){

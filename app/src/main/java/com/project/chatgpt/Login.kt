@@ -146,6 +146,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     val intent =
                                         Intent(this@Login, Home::class.java)
                                     intent.putExtra("acc", task.result.displayName)
+                                    AppPreferences.setUserLoginStatus(this@Login,true)
                                     startActivity(intent)
                                 } else {
                                     AppPreferences.setUserName(this@Login,
@@ -162,6 +163,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     val intent =
                                         Intent(this@Login, Home::class.java)
                                     intent.putExtra("acc", task.result.email)
+                                    AppPreferences.setUserLoginStatus(this@Login,true)
                                     startActivity(intent)
                                 }
                             }
@@ -200,6 +202,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
                             )
+                            AppPreferences.setUserLoginStatus(this@Login,true)
                             startActivity(intent)
                         } else {
                             AppPreferences.setUserName(
@@ -225,6 +228,7 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                 "acc",
                                 firebaseAuth.currentUser!!.email.toString().substring(0, 6)
                             )
+                            AppPreferences.setUserLoginStatus(this@Login,true)
                             startActivity(intent)
                         }
                     }

@@ -1,9 +1,7 @@
 package com.project.chatgpt.Fragments
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +22,6 @@ import com.project.chatgpt.Model.UserData
 import com.project.chatgpt.R
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.databinding.FragmentChatBinding
-
 class ChatFragment(val mcontext: Context) : Fragment() {
     lateinit var binding: FragmentChatBinding
     lateinit var firebaseAuth: FirebaseAuth
@@ -33,6 +30,9 @@ class ChatFragment(val mcontext: Context) : Fragment() {
     val database = Firebase.database
     val myRef = database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
     var keym: String = ""
+    var time: String = ""
+    var msg: String = ""
+
     lateinit var adapterUser: AdapterUser
     val list = ArrayList<UserData>()
     lateinit var ncontext: Context
@@ -57,14 +57,6 @@ class ChatFragment(val mcontext: Context) : Fragment() {
             requireContext().applicationContext,
             GoogleSignInOptions.DEFAULT_SIGN_IN
         )
-
-//        binding.bt.setOnClickListener {
-//            firebaseAuth.signOut()
-//            googleSignInClient.signOut().addOnCompleteListener {
-//                startActivity(Intent(requireContext().applicationContext, Login::class.java))
-//            }
-//            Log.e("pos",list.size.toString())
-//        }
         return binding.root
     }
 
@@ -93,9 +85,6 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                         for (snap2 in snapshot2.children) {
                                             val user1 = snap2.child("user_1").value.toString()
                                             val user2 = snap2.child("user_2").value.toString()
-                                            Log.e("user1",snap2.child("user_1").value.toString())
-                                            Log.e("user2",snap2.child("user_2").value.toString())
-                                            Log.e("NAME",AppPreferences.getUserName(requireContext().applicationContext))
                                             if (user1.equals(
                                                     AppPreferences.getUserName(requireContext().applicationContext).replace(".","")) &&
                                                 user2.equals(snap.key.toString()) || user1.equals(
@@ -108,23 +97,34 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                                 )
                                             ) {
                                                 keym = snap2.key.toString()
+                                                if (snap2.hasChild("messages")){
+                                                    for (snap3 in snap2.child("messages").children) {
+                                                        time=snap3.key.toString()
+                                                            msg=snap3.child("msg").value.toString()
+                                                    }
+                                            }
                                                 i++
                                                 b = true
                                             } else {
                                                 i++
                                                 if (i == snapshot2.childrenCount.toInt()) {
-                                                    if (!b) keym = ""
+                                                    if (!b){
+                                                        time=""
+                                                        msg=""
+                                                        keym = ""}
                                                 }
                                             }
                                         }
                                     } else {
+                                        time=""
+                                        msg=""
                                         keym = ""
                                     }
                                     list.add(
                                         UserData(
                                             snap.key!!,
                                             snap.child("pic").value.toString(),
-                                            keym
+                                            keym,msg,time
                                         )
                                     )
                                     adapterUser.notifyDataSetChanged()

@@ -100,7 +100,7 @@ class CreateProfile : AppCompatActivity(), TextWatcher {
                                      binding.name.text.toString()
                                  )
                                  val intent: Intent =
-                                     Intent(this@CreateProfile, MainActivity::class.java)
+                                     Intent(this@CreateProfile, Home::class.java)
                                  startActivity(intent)
                              } else {
                                  AppPreferences.setUserName(this@CreateProfile, binding.name.text.toString())
@@ -115,7 +115,7 @@ class CreateProfile : AppCompatActivity(), TextWatcher {
                                      .child(binding.name.text.toString())
                                      .child("pass").setValue(binding.cnfpass.text.toString())
                                  val intent: Intent =
-                                     Intent(this@CreateProfile, MainActivity::class.java)
+                                     Intent(this@CreateProfile, Home::class.java)
                                  startActivity(intent)
                              }
                          }

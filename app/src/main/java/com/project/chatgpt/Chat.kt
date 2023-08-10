@@ -65,7 +65,14 @@ class Chat : AppCompatActivity() {
                     if (genchatkey.isEmpty()){
                         genchatkey="1"
                         if (snapshot.hasChild("chat")){
-                            genchatkey= (snapshot.child("chat").childrenCount+1).toString()
+                            for (snan in snapshot.child("chat").children){
+                                if (snan.child("user_1").value.toString().contentEquals(AppPreferences.getUserName(this@Chat).replace(".","")) &&
+                                    snan.child("user_2").value.toString().contentEquals(userdata.name) ||
+                                    snan.child("user_1").value.toString().contentEquals(userdata.name) &&
+                                    snan.child("user_2").value.toString().contentEquals(AppPreferences.getUserName(this@Chat).replace(".",""))){
+                                    genchatkey=snan.key.toString()
+                                }else genchatkey= (snapshot.child("chat").childrenCount+1).toString()
+                            }
                         }
                     }else{
                         genchatkey=genchatkey

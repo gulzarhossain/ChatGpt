@@ -8,13 +8,24 @@ import androidx.annotation.NonNull;
 public class UserData implements Parcelable {
     private String name;
     private String pic;
-
     private String chat_key;
+    private String msg;
+    private String time;
 
     protected UserData(Parcel in) {
         name = in.readString();
         pic = in.readString();
         chat_key = in.readString();
+        msg = in.readString();
+        time = in.readString();
+    }
+
+    public UserData(String name, String pic, String chat_key, String msg, String time) {
+        this.name = name;
+        this.pic = pic;
+        this.chat_key = chat_key;
+        this.msg = msg;
+        this.time = time;
     }
 
     public static final Creator<UserData> CREATOR = new Creator<UserData>() {
@@ -33,10 +44,12 @@ public class UserData implements Parcelable {
         return chat_key;
     }
 
-    public UserData(String name, String pic, String chat_key) {
-        this.name = name;
-        this.pic = pic;
-        this.chat_key = chat_key;
+    public String getMsg() {
+        return msg;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public String getName() {
@@ -57,5 +70,7 @@ public class UserData implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(pic);
         parcel.writeString(chat_key);
+        parcel.writeString(msg);
+        parcel.writeString(time);
     }
 }

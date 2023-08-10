@@ -1,8 +1,10 @@
 package com.project.chatgpt
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
@@ -16,6 +18,7 @@ import com.project.chatgpt.Adapters.FragmentAdapter
 import com.project.chatgpt.Fragments.ChatFragment
 import com.project.chatgpt.Fragments.FindFriends
 import com.project.chatgpt.Fragments.FriendReq
+import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ActivityHomeBinding
 
@@ -75,6 +78,18 @@ class Home : AppCompatActivity() {
 //            var wrapper: Context =  ContextThemeWrapper(this, R.style.CustomPopUpStyle)
             val pop= PopupMenu(this,binding.btmenu)
             pop.menuInflater.inflate(R.menu.popup2,pop.menu)
+            pop.setOnMenuItemClickListener(object :PopupMenu.OnMenuItemClickListener{
+                override fun onMenuItemClick(p0: MenuItem?): Boolean {
+                    when(p0!!.itemId){
+                        R.id.log->{
+                            AppPreferences.setUserLoginStatus(this@Home,false)
+                            startActivity(Intent(this@Home,Login::class.java))
+                            finish()
+                        }
+                    }
+                    return false
+                }
+            })
             pop.show()
         }
     }

@@ -26,7 +26,6 @@ class ChatFragment(val mcontext: Context) : Fragment() {
     lateinit var binding: FragmentChatBinding
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
-
     val database = Firebase.database
     val myRef = database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
     var keym: String = ""

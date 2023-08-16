@@ -1,10 +1,8 @@
 package com.project.chatgpt
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
@@ -21,7 +19,6 @@ import com.google.firebase.ktx.Firebase
 import com.project.chatgpt.Adapters.MsgAdapter
 import com.project.chatgpt.Model.MsgData
 import com.project.chatgpt.Model.UserData
-import com.project.chatgpt.Service.ServiceChat
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.databinding.ActivityChatBinding
 
@@ -39,7 +36,7 @@ class Chat : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=DataBindingUtil.setContentView(this,R.layout.activity_chat)
         val window = this.window
-        window.statusBarColor = Color.parseColor("#80070B17")
+        window.statusBarColor = Color.parseColor("#4A4A4A")
 
         val userdata = intent.getParcelableExtra<UserData>("Bundle")
         msgAdapter= MsgAdapter(this, msglist)
@@ -52,12 +49,7 @@ class Chat : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
             finish()
         }
-
-        startService(Intent(this@Chat,ServiceChat::class.java))
-
         genchatkey=userdata.chat_key
-
-        Log.e("KEY",genchatkey)
 
         myRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -109,8 +101,9 @@ class Chat : AppCompatActivity() {
             }
         }
 
+        binding.etmsg.requestFocus()
     }
-    fun popup(pos:Int, view: View){
+    fun popup(pos:Int, view: View,boolean: Boolean){
        popupMenu = PopupMenu(this@Chat,view)
         val menuInflater:MenuInflater=popupMenu.menuInflater
         menuInflater.inflate(R.menu.popup,popupMenu.menu)
@@ -125,6 +118,8 @@ class Chat : AppCompatActivity() {
                 .invoke(menuHelper, true)
         } catch (e: Exception) {
         }
+        popupMenu.menu.findItem(R.id.del).isEnabled = boolean
+
         popupMenu.setOnMenuItemClickListener { item ->
             val id = item!!.itemId
             when (id) {

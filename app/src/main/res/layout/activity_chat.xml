@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
 >
     <RelativeLayout
-        android:background="#070B17"
+        android:background="#000000"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,7 +14,7 @@
             android:id="@+id/lytool"
             app:strokeWidth="0dp"
             android:elevation="10dp"
-            app:cardBackgroundColor="#80FFFFFF"
+            app:cardBackgroundColor="#4A4A4A"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:padding="5dp"
@@ -34,7 +34,8 @@
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                     android:layout_width="50dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_launcher_background"
+                    android:background="@color/black"
+                    android:src="@drawable/round_person_2_24"
                     android:layout_height="50dp"/>
                 <TextView
                     android:layout_marginStart="5dp"
@@ -79,8 +80,8 @@
                     android:hint="Enter Your Message"
                     android:maxLines="1"
                     android:paddingStart="14dp"
-                    android:paddingEnd="40dp"
                     android:paddingTop="14dp"
+                    android:paddingEnd="40dp"
                     android:paddingBottom="14dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />
@@ -90,6 +91,7 @@
                     app:icon="@drawable/round_mic_24"
                     android:layout_alignParentEnd="true"
                     app:iconSize="30dp"
+                    app:rippleColor="@color/white"
                     app:iconTint="@color/purple_700"
                     style="@style/Widget.Material3.Button.IconButton"
                     android:layout_height="wrap_content"
@@ -97,10 +99,12 @@
             </RelativeLayout>
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
-                app:backgroundTint="#80FFFFFF"
+                app:backgroundTint="#4A4A4A"
                 android:id="@+id/btsend"
                 android:padding="15dp"
-                app:iconSize="25dp"
+                app:iconTint="@color/purple_700"
+                app:iconSize="20dp"
+                app:rippleColor="@color/white"
                 app:icon="@drawable/baseline_send_24"
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_centerVertical="true"

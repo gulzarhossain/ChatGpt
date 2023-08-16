@@ -13,6 +13,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img"
                 android:scaleType="fitXY"
+                android:background="@color/purple_700"
                 android:layout_gravity="center"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 android:layout_width="70dp"

@@ -16,7 +16,7 @@
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:id="@+id/text"
-                android:textColor="@color/purple_700"
+                android:textColor="@color/white"
                 android:fontFamily="@font/cherry"
                 android:text="CHATgpt"
                 android:layout_centerVertical="true"
@@ -28,6 +28,7 @@
                 app:icon="@drawable/baseline_more_vert_24"
                 android:layout_alignParentEnd="true"
                 app:iconSize="25dp"
+                app:iconTint="@color/white"
                 android:layout_centerVertical="true"
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_height="wrap_content"/>
@@ -35,7 +36,8 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/lytab"
             app:tabIndicatorFullWidth="true"
-            app:tabTextColor="@color/purple_700"
+            app:tabTextColor="#80FFFFFF"
+            app:tabIndicatorColor="@color/white"
             app:tabSelectedTextColor="@color/white"
             app:tabIndicatorAnimationMode="elastic"
             android:layout_width="match_parent"
@@ -45,5 +47,11 @@
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/fbbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
     </LinearLayout>
 </layout>

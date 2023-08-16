@@ -12,8 +12,10 @@
             android:layout_height="wrap_content">
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img"
+                android:scaleType="fitXY"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 android:layout_width="70dp"
+                android:background="@color/purple_700"
                 android:src="@drawable/ic_launcher_background"
                 android:layout_height="70dp"/>
             <LinearLayout

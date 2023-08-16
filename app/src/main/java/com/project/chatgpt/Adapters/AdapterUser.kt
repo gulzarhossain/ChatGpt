@@ -28,8 +28,13 @@ class AdapterUser(val fragment: Fragment,private val context: Context, private v
         with(holder){
             with(list[position]){
                 binding.name.text= list[position].name.replace("@gmailcom","")
-                binding.lastmsg.text=this.msg
-                binding.lasttime.text=AppUtility.setDate(this.time)
+                if (this.msg==""){
+                    binding.lastmsg.text="-------"
+                }else binding.lastmsg.text=this.msg
+                if (this.time==""){
+                    binding.lasttime.text="-------"
+                }else  binding.lasttime.text=AppUtility.setDate(this.time)
+
                 Glide.with(context).load(list[position].pic).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).placeholder(R.drawable.round_person_2_24).listener(object :RequestListener<Drawable>{
                     override fun onLoadFailed(e: GlideException?, model: Any?,
                                               target: Target<Drawable>?, isFirstResource: Boolean): Boolean {

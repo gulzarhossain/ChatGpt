@@ -1,7 +1,6 @@
 package com.project.chatgpt.Adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,14 +55,14 @@ class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.
 
                 binding.msg1.setOnLongClickListener(object : View.OnLongClickListener {
                     override fun onLongClick(p0: View?): Boolean {
-                        (context as Chat).popup(holder.adapterPosition,binding.msg1)
+                        (context as Chat).popup(holder.adapterPosition,binding.msg1,false)
                         return false
                     }
                 })
 
                 binding.msgown.setOnLongClickListener(object : View.OnLongClickListener {
                     override fun onLongClick(p0: View?): Boolean {
-                        (context as Chat).popup(holder.adapterPosition,binding.msgown)
+                        (context as Chat).popup(holder.adapterPosition,binding.msgown,true)
                         return false
                     }
                 })

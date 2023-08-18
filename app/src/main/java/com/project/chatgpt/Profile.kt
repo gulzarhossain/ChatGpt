@@ -48,6 +48,9 @@ class Profile : AppCompatActivity() {
         binding=DataBindingUtil.setContentView(this,R.layout.activity_profile)
         window.statusBarColor=Color.parseColor("#33000000")
 
+        binding.email.text=AppPreferences.getUserName(this)
+        binding.name.text=AppPreferences.getUserCode(this)
+
         storageReference=FirebaseStorage.getInstance().reference
 
         binding.vpager.layoutParams.height=AppUtility.getScreenResolusion(this,"h")/2
@@ -134,11 +137,13 @@ class Profile : AppCompatActivity() {
                                 }
                             }
                         }else {
-                            it.items[i].downloadUrl.addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    list.add(ImageData(it.result.toString(), 0))
+                            if (it.items[i].name.contains("Showcase ")){
+                                it.items[i].downloadUrl.addOnCompleteListener {
+                                    if (it.isSuccessful) {
+                                        list.add(ImageData(it.result.toString(), 0))
+                                    }
+                                    adapter.notifyDataSetChanged()
                                 }
-                                adapter.notifyDataSetChanged()
                             }
                         }
                     }

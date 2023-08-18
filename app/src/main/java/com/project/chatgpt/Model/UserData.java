@@ -11,6 +11,7 @@ public class UserData implements Parcelable {
     private String chat_key;
     private String msg;
     private String time;
+    private String type;
 
     protected UserData(Parcel in) {
         name = in.readString();
@@ -18,14 +19,16 @@ public class UserData implements Parcelable {
         chat_key = in.readString();
         msg = in.readString();
         time = in.readString();
+        type = in.readString();
     }
 
-    public UserData(String name, String pic, String chat_key, String msg, String time) {
+    public UserData(String name, String pic, String chat_key, String msg, String time,String type) {
         this.name = name;
         this.pic = pic;
         this.chat_key = chat_key;
         this.msg = msg;
         this.time = time;
+        this.type = type;
     }
 
     public static final Creator<UserData> CREATOR = new Creator<UserData>() {
@@ -60,6 +63,10 @@ public class UserData implements Parcelable {
         return pic;
     }
 
+    public String getType() {
+        return type;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -72,5 +79,6 @@ public class UserData implements Parcelable {
         parcel.writeString(chat_key);
         parcel.writeString(msg);
         parcel.writeString(time);
+        parcel.writeString(type);
     }
 }

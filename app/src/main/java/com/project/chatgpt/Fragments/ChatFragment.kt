@@ -2,14 +2,18 @@ package com.project.chatgpt.Fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,6 +35,8 @@ class ChatFragment(val mcontext: Context) : Fragment() {
     var keym: String = ""
     var time: String = ""
     var msg: String = ""
+    var TYPE: String = ""
+
 
     lateinit var adapterUser: AdapterUser
     val list = ArrayList<UserData>()
@@ -100,6 +106,7 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                                     for (snap3 in snap2.child("messages").children) {
                                                         time=snap3.key.toString()
                                                             msg=snap3.child("msg").value.toString()
+                                                        TYPE=snap3.child("typ").value.toString()
                                                     }
                                             }
                                                 i++
@@ -110,7 +117,9 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                                     if (!b){
                                                         time=""
                                                         msg=""
-                                                        keym = ""}
+                                                        keym = ""
+                                                        TYPE = ""
+                                                    }
                                                 }
                                             }
                                         }
@@ -118,13 +127,9 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                         time=""
                                         msg=""
                                         keym = ""
+                                        TYPE = ""
                                     }
-                                    list.add(
-                                        UserData(
-                                            snap.key!!,
-                                            snap.child("pic").value.toString(),
-                                            keym,msg,time
-                                        )
+                                    list.add(UserData(snap.key!!, snap.child("pic").value.toString(),keym,msg,time,TYPE)
                                     )
                                     adapterUser.notifyDataSetChanged()
                                 }
@@ -136,15 +141,22 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
+
             }
         })
     }
-
     fun Click(user: UserData) {
         val intent = Intent(mcontext, Chat::class.java)
         intent.putExtra("Bundle", user)
         mcontext.startActivity(intent)
+    }
+    fun Click2(v:View) {
+        val v2: View = LayoutInflater.from(mcontext).inflate(R.layout.user_find_item, null)
+        val po=PopupWindow(v2,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        po.showAtLocation(v,Gravity.TOP,0,0)
+        v2.findViewById<MaterialButton>(R.id.bt).setOnClickListener {
+            po.dismiss()
+        }
     }
 }

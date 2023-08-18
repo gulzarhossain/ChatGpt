@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.chatgpt.Chat
 import com.project.chatgpt.Model.MsgData
 import com.project.chatgpt.Utils.AppPreferences
@@ -12,10 +13,7 @@ import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ItemMsgBinding
 
 class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.Adapter<MsgAdapter.Item>() {
-    var lastdate=""
-
     class Item (val binding: ItemMsgBinding):RecyclerView.ViewHolder(binding.root)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Item {
         val binding=ItemMsgBinding.inflate(LayoutInflater.from(context),parent,false)
         return Item(binding)
@@ -29,43 +27,87 @@ class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.
         with(holder) {
             with(list[position]) {
                 if (position == 0) {
-                    binding.date.text = AppUtility.setDate(list.get(position).time)
+                    binding.date.text = AppUtility.setDate(this.time)
                     binding.date.visibility = View.VISIBLE
                 } else {
-                    if (AppUtility.convertDate(list.get(position).time)
-                            .equals(AppUtility.convertDate(list.get(position - 1).time))
+                    if (AppUtility.convertDate(this.time)
+                            .equals(AppUtility.convertDate(list[position - 1].time))
                     ) {
                         binding.date.visibility = View.GONE
                     } else {
-                        binding.date.text = AppUtility.setDate(list.get(position).time)
+                        binding.date.text = AppUtility.setDate(this.time)
                         binding.date.visibility = View.VISIBLE
                     }
                 }
-                if (list[position].name.equals(AppPreferences.getUserName(context))) {
-                    binding.ly1.visibility = View.GONE
-                    binding.lyown.visibility = View.VISIBLE
-                    binding.msgown.text = list[position].msg
-                    binding.timeown.text = AppUtility.convertTime(list[position].time)
-                } else {
-                    binding.ly1.visibility = View.VISIBLE
-                    binding.lyown.visibility = View.GONE
-                    binding.msg1.text = list[position].msg
-                    binding.time1.text = AppUtility.convertTime(list[position].time)
+                if (this.name.equals(AppPreferences.getUserName(context))) {
+                    if (this.typ.equals("text") || this.typ.equals("null")) {
+                        binding.lyimg1.visibility = View.GONE
+                        binding.lyimgown.visibility = View.GONE
+                        binding.ly1.visibility = View.GONE
+                        binding.lyown.visibility = View.VISIBLE
+                        binding.msgown.visibility = View.VISIBLE
+                        binding.msgown.text = this.msg
+                        binding.timeown.text = AppUtility.convertTime(this.time)
+                    }else if (this.typ.equals("gif")) {
+                        binding.ly1.visibility = View.GONE
+                        binding.lyown.visibility = View.VISIBLE
+                        binding.msgown.visibility = View.GONE
+                        binding.lyimg1.visibility = View.GONE
+                        binding.lyimgown.visibility = View.VISIBLE
+                        binding.timeown.text = AppUtility.convertTime(this.time)
+                        Glide.with(context).asGif().load(this.msg).into(binding.imgown)
+                    }else{
+                        binding.ly1.visibility = View.GONE
+                        binding.lyown.visibility = View.VISIBLE
+                        binding.msgown.visibility = View.GONE
+                        binding.lyimg1.visibility = View.GONE
+                        binding.lyimgown.visibility = View.VISIBLE
+                        binding.timeown.text = AppUtility.convertTime(this.time)
+                        Glide.with(context).load(this.msg).into(binding.imgown)
+                    }
+                    } else {
+                    if (this.typ.equals("text") || this.typ.equals("null")) {
+                        binding.lyimg1.visibility = View.GONE
+                        binding.lyimgown.visibility = View.GONE
+                        binding.ly1.visibility = View.VISIBLE
+                        binding.lyown.visibility = View.GONE
+                        binding.msg1.visibility = View.VISIBLE
+                        binding.msg1.text = this.msg
+                        binding.time1.text = AppUtility.convertTime(this.time)
+                    }else if (this.typ.equals("gif")) {
+                        binding.ly1.visibility = View.VISIBLE
+                        binding.lyown.visibility = View.GONE
+                        binding.msg1.visibility = View.GONE
+                        binding.lyimg1.visibility = View.VISIBLE
+                        binding.lyimgown.visibility = View.GONE
+                        binding.time1.text = AppUtility.convertTime(this.time)
+                        Glide.with(context).asGif().load(this.msg).into(binding.img1)
+                    }else{
+                        binding.ly1.visibility = View.VISIBLE
+                        binding.lyown.visibility = View.GONE
+                        binding.msg1.visibility = View.GONE
+                        binding.lyimg1.visibility = View.VISIBLE
+                        binding.lyimgown.visibility = View.GONE
+                        binding.time1.text = AppUtility.convertTime(this.time)
+                        Glide.with(context).load(this.msg).into(binding.img1)
+                    }
                 }
 
-                binding.msg1.setOnLongClickListener(object : View.OnLongClickListener {
-                    override fun onLongClick(p0: View?): Boolean {
-                        (context as Chat).popup(holder.adapterPosition,binding.msg1,false)
-                        return false
-                    }
-                })
+                binding.msg1.setOnLongClickListener {
+                    (context as Chat).popup(holder.adapterPosition, binding.msg1, false)
+                    false
+                }
 
-                binding.msgown.setOnLongClickListener(object : View.OnLongClickListener {
-                    override fun onLongClick(p0: View?): Boolean {
-                        (context as Chat).popup(holder.adapterPosition,binding.msgown,true)
-                        return false
-                    }
-                })
+                binding.msgown.setOnLongClickListener {
+                    (context as Chat).popup(holder.adapterPosition, binding.msgown, true)
+                    false
+                }
+
+
+                binding.lyimgown.setOnLongClickListener {
+                    (context as Chat).popup(holder.adapterPosition, binding.msgown, true)
+                    false
+                }
             }
         }
     }

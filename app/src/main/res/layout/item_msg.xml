@@ -30,12 +30,36 @@
                 android:gravity="start|center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:id="@+id/lyimg1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:visibility="gone"
+                android:paddingTop="16dp"
+                android:paddingEnd="3dp"
+                android:paddingStart="3dp"
+                android:paddingBottom="3dp"
+                android:background="@drawable/primary_round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    app:strokeWidth="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp">
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:src="@drawable/pose1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/time1"
-                android:layout_alignEnd="@+id/msg1"
                 android:text="3:30 pm"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="3dp"
-                android:layout_marginEnd="5dp"
                 android:textSize="8dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
@@ -44,11 +68,11 @@
         <RelativeLayout
             android:layout_marginStart="80dp"
             android:id="@+id/lyown"
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/msgown"
+                android:layout_alignParentEnd="true"
                 style="@style/Button2"
                 android:text="ANCE PRIVATE LIMITED"
                 app:backgroundTint="#4A4A4A"
@@ -56,9 +80,35 @@
                 android:gravity="start|center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:id="@+id/lyimgown"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:visibility="gone"
+                android:paddingTop="16dp"
+                android:paddingEnd="3dp"
+                android:paddingStart="3dp"
+                android:paddingBottom="3dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/primary_round2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    app:strokeWidth="0dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp">
+                    <ImageView
+                        android:id="@+id/imgown"
+                        android:src="@drawable/pose1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
             <TextView
                 android:id="@+id/timeown"
-                android:layout_alignEnd="@+id/msgown"
+                android:layout_alignParentEnd="true"
                 android:text="3:30 pm"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="6dp"
@@ -66,6 +116,7 @@
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         </RelativeLayout>
     </LinearLayout>
 </layout>

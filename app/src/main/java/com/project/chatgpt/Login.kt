@@ -82,6 +82,10 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                         this@Login,
                                         `object`.getString("name")
                                     )
+                                    AppPreferences.setUserCode(
+                                        this@Login,
+                                        `object`.getString("name")
+                                    )
                                     val intent =
                                         Intent(this@Login, Home::class.java)
                                     intent.putExtra("acc", `object`.getString("name"))
@@ -89,6 +93,10 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                     AppPreferences.setUserLoginType(this@Login, "FB")
                                     startActivity(intent)
                                 } else {
+                                    AppPreferences.setUserCode(
+                                        this@Login,
+                                        `object`.getString("name")
+                                    )
                                     AppPreferences.setUserName(
                                         this@Login,
                                         `object`.getString("name")
@@ -188,6 +196,10 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                             this@Login,
                                             task.result.email.toString()
                                         )
+                                        AppPreferences.setUserCode(
+                                            this@Login,
+                                            task.result.displayName.toString()
+                                        )
                                         val intent =
                                             Intent(this@Login, Home::class.java)
                                         intent.putExtra("acc", task.result.displayName)
@@ -198,6 +210,10 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                                         AppPreferences.setUserName(
                                             this@Login,
                                             task.result.email.toString()
+                                        )
+                                        AppPreferences.setUserCode(
+                                            this@Login,
+                                            task.result.displayName.toString()
                                         )
                                         myRef.child("users")
                                             .child(task.result.email.toString().replace(".", ""))
@@ -250,6 +266,9 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.child("users").hasChild(firebaseAuth.currentUser!!.email.toString().replace(".", ""))) {
                             AppPreferences.setUserName(this@Login, firebaseAuth.currentUser!!.email.toString())
+                            AppPreferences.setUserCode(this@Login,
+                                firebaseAuth.currentUser!!.email.toString().substring(0, 6)
+                            )
                             val intent = Intent(this@Login, Home::class.java)
                             intent.putExtra("acc", firebaseAuth.currentUser!!.email.toString().substring(0, 6))
                             AppPreferences.setUserLoginType(this@Login, "EML")
@@ -259,6 +278,9 @@ class Login : AppCompatActivity(), OnCompleteListener<AuthResult>, OnFailureList
                             AppPreferences.setUserName(
                                 this@Login,
                                 firebaseAuth.currentUser!!.email.toString()
+                            )
+                            AppPreferences.setUserCode(this@Login,
+                                firebaseAuth.currentUser!!.email.toString().substring(0, 6)
                             )
                             myRef.child("users")
                                 .child(firebaseAuth.currentUser!!.email.toString().replace(".", ""))

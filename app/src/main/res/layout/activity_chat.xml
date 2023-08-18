@@ -8,6 +8,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             app:cardCornerRadius="0dp"
@@ -49,7 +52,6 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvmsg"
             android:paddingStart="5dp"
@@ -67,12 +69,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
+                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/btsend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <RelativeLayout
+                    android:id="@+id/lyedit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etmsg"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -85,24 +93,57 @@
                     android:paddingBottom="14dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:id="@+id/btrecording"
-                    app:icon="@drawable/round_mic_24"
+                <LinearLayout
+                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    app:iconSize="30dp"
-                    app:rippleColor="@color/white"
-                    app:iconTint="@color/purple_700"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_height="wrap_content"
-                    tools:ignore="RelativeOverlap" />
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:id="@+id/btadd"
+                        app:icon="@drawable/baseline_add_24"
+                        android:layout_alignParentEnd="true"
+                        app:iconSize="25dp"
+                        android:translationX="20dp"
+                        app:rippleColor="@color/white"
+                        app:iconTint="@color/white"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:id="@+id/btcam"
+                        app:icon="@drawable/round_photo_camera_24"
+                        android:layout_alignParentEnd="true"
+                        app:iconSize="25dp"
+                        android:translationX="10dp"
+                        app:rippleColor="@color/white"
+                        app:iconTint="@color/white"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_height="wrap_content"
+                        />
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:id="@+id/btrecording"
+                        app:icon="@drawable/round_mic_24"
+                        android:layout_alignParentEnd="true"
+                        app:iconSize="25dp"
+                        app:rippleColor="@color/white"
+                        app:iconTint="@color/white"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
             </RelativeLayout>
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 app:backgroundTint="#4A4A4A"
                 android:id="@+id/btsend"
                 android:padding="15dp"
-                app:iconTint="@color/purple_700"
+                app:iconTint="@color/white"
                 app:iconSize="20dp"
                 app:rippleColor="@color/white"
                 app:icon="@drawable/baseline_send_24"
@@ -111,6 +152,93 @@
                 android:layout_marginStart="5dp"
                 android:layout_alignParentEnd="true"
                 android:layout_height="wrap_content"/>
+        </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/lyimg"
+            android:visibility="gone"
+            android:background="#4A4A4A"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addimg"
+                android:layout_width="wrap_content"
+                app:iconTint="@color/white"
+                app:iconSize="30dp"
+                app:icon="@drawable/baseline_add_photo_alternate_24"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btcloseimagely"
+                android:layout_width="wrap_content"
+                app:iconTint="@color/white"
+                app:iconSize="30dp"
+                android:layout_alignParentEnd="true"
+                app:icon="@drawable/baseline_close_24"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="#686868"
+                android:layout_above="@+id/lybtmimg"
+                android:layout_below="@+id/btcloseimagely"
+                android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imagesend"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            </com.google.android.material.card.MaterialCardView>
+            <RelativeLayout
+                android:id="@+id/lybtmimg"
+                android:padding="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/btsendimg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/etmsgimg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/et_bg"
+                        android:hint="Enter Your Message"
+                        android:maxLines="1"
+                        android:paddingStart="14dp"
+                        android:paddingTop="14dp"
+                        android:paddingEnd="40dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white" />
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:layout_width="wrap_content"
+                        android:indeterminate="true"
+                        android:id="@+id/imgprogres"
+                        app:indicatorColor="@color/white"
+                        android:visibility="gone"
+                        android:layout_marginEnd="10dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/btsendimg"
+                    android:padding="15dp"
+                    app:backgroundTint="@color/purple_700"
+                    app:iconTint="@color/white"
+                    app:iconSize="20dp"
+                    app:rippleColor="@color/white"
+                    app:icon="@drawable/baseline_send_24"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

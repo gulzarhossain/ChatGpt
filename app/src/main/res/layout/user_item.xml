@@ -47,9 +47,10 @@
                 </RelativeLayout>
                 <TextView
                     android:id="@+id/lastmsg"
-                    android:text="Massage"
+                    android:drawablePadding="5dp"
                     android:textColor="#99FFFFFF"
                     android:textStyle="bold"
+                    android:maxLines="1"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

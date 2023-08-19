@@ -124,8 +124,9 @@ class Home : AppCompatActivity() {
                             }
                         }
                         R.id.pro->{
-                            startActivity(Intent(this@Home,Profile::class.java))
-                        }
+                            val intent=Intent(this@Home,Profile::class.java)
+                            intent.putExtra("ID",AppPreferences.getUserName(this@Home).replace(".",""))
+                            startActivity(intent)                        }
                     }
                     return false
                 }

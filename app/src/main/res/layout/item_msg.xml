@@ -35,7 +35,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:visibility="gone"
                 android:paddingTop="16dp"
                 android:paddingEnd="3dp"
                 android:paddingStart="3dp"
@@ -50,7 +49,7 @@
                     android:layout_height="300dp">
                     <ImageView
                         android:id="@+id/img1"
-                        android:src="@drawable/pose1"
+                        android:src="@drawable/imageload"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.card.MaterialCardView>

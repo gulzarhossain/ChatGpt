@@ -27,8 +27,7 @@ class AdapterUser(val fragment: Fragment,private val context: Context, private v
         with(holder){
             with(list[position]){
                 binding.name.text= list[position].name.replace("@gmailcom","")
-
-                if (type.equals("text") || type.equals("null")){
+                if (type.equals("text") || type.equals("") ||  type.equals("null")){
                     binding.lastmsg.setCompoundDrawablesRelative(null,null,null,null)
                     if (this.msg==""){
                         binding.lastmsg.text="-------"
@@ -39,11 +38,15 @@ class AdapterUser(val fragment: Fragment,private val context: Context, private v
                 }else if (type.equals("gif")){
                     binding.lastmsg.text="GIF"
                     binding.lastmsg.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.baseline_gif_box_24),null,null,null)
-                    binding.lasttime.text= AppUtility.setDate(this.time)
+                    if (this.time==""){
+                        binding.lasttime.text="-------"
+                    }else  binding.lasttime.text= AppUtility.setDate(this.time)
                 }else{
                     binding.lastmsg.text="Image"
                     binding.lastmsg.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.baseline_image_24),null,null,null)
-                    binding.lasttime.text= AppUtility.setDate(this.time)
+                    if (this.time==""){
+                        binding.lasttime.text="-------"
+                    }else  binding.lasttime.text= AppUtility.setDate(this.time)
                 }
 
                 Glide.with(context).load(list[position].pic).placeholder(R.drawable.round_person_2_24).listener(object :RequestListener<Drawable>{
@@ -67,7 +70,7 @@ class AdapterUser(val fragment: Fragment,private val context: Context, private v
                     (fragment as ChatFragment).Click(list[position])
                 }
                 binding.img.setOnClickListener {
-                    (fragment as ChatFragment).Click2(it.rootView)
+                    (fragment as ChatFragment).Click2(list[position].name)
                 }
             }
         }

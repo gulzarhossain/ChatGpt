@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.chatgpt.Chat
 import com.project.chatgpt.Model.MsgData
+import com.project.chatgpt.R
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ItemMsgBinding
@@ -55,7 +56,7 @@ class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.
                         binding.lyimg1.visibility = View.GONE
                         binding.lyimgown.visibility = View.VISIBLE
                         binding.timeown.text = AppUtility.convertTime(this.time)
-                        Glide.with(context).asGif().load(this.msg).into(binding.imgown)
+                        Glide.with(context).asGif().load(this.msg).placeholder(R.drawable.imageload).into(binding.imgown)
                     }else{
                         binding.ly1.visibility = View.GONE
                         binding.lyown.visibility = View.VISIBLE
@@ -63,7 +64,7 @@ class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.
                         binding.lyimg1.visibility = View.GONE
                         binding.lyimgown.visibility = View.VISIBLE
                         binding.timeown.text = AppUtility.convertTime(this.time)
-                        Glide.with(context).load(this.msg).into(binding.imgown)
+                        Glide.with(context).load(this.msg).placeholder(R.drawable.imageload).into(binding.imgown)
                     }
                     } else {
                     if (this.typ.equals("text") || this.typ.equals("null")) {

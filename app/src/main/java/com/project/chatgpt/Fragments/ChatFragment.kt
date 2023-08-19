@@ -2,18 +2,14 @@ package com.project.chatgpt.Fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.project.chatgpt.Adapters.AdapterUser
 import com.project.chatgpt.Chat
 import com.project.chatgpt.Model.UserData
+import com.project.chatgpt.Profile
 import com.project.chatgpt.R
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.databinding.FragmentChatBinding
@@ -129,8 +126,7 @@ class ChatFragment(val mcontext: Context) : Fragment() {
                                         keym = ""
                                         TYPE = ""
                                     }
-                                    list.add(UserData(snap.key!!, snap.child("pic").value.toString(),keym,msg,time,TYPE)
-                                    )
+                                    list.add(UserData(snap.key!!, snap.child("pic").value.toString(),keym,msg,time,TYPE))
                                     adapterUser.notifyDataSetChanged()
                                 }
 
@@ -151,12 +147,9 @@ class ChatFragment(val mcontext: Context) : Fragment() {
         intent.putExtra("Bundle", user)
         mcontext.startActivity(intent)
     }
-    fun Click2(v:View) {
-        val v2: View = LayoutInflater.from(mcontext).inflate(R.layout.user_find_item, null)
-        val po=PopupWindow(v2,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-        po.showAtLocation(v,Gravity.TOP,0,0)
-        v2.findViewById<MaterialButton>(R.id.bt).setOnClickListener {
-            po.dismiss()
-        }
+    fun Click2(v:String) {
+        val intent=Intent(mcontext,Profile::class.java)
+        intent.putExtra("ID",v)
+        mcontext.startActivity(intent)
     }
 }

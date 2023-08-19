@@ -12,6 +12,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
@@ -36,7 +39,6 @@ public class AppUtility {
         }
         return height;
     }
-
     public static String changeDateFormat(String inputFormat, String outputFormat, String inputDate) {
 
         try {

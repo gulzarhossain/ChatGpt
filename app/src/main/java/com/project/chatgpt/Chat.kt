@@ -46,7 +46,6 @@ import com.project.chatgpt.Model.UserData
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.databinding.ActivityChatBinding
 
-
 class Chat : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
 
@@ -118,7 +117,6 @@ class Chat : AppCompatActivity() {
 
         binding.etmsg.requestFocus()
 
-
       val et=object : TextInputEditText(this@Chat) {
           var mimeTypes: Array<String> = arrayOf("image/png",
               "image/gif",
@@ -160,7 +158,7 @@ class Chat : AppCompatActivity() {
 
         et.layoutParams = RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         et.background=getDrawable(R.drawable.etbg)
-        et.setPadding(34,45,40,45)
+        et.setPadding(34,40,45,40)
         et.hint="Type a message"
         et.typeface=resources.getFont(R.font.calibri_normal)
         et.setHintTextColor(ColorStateList.valueOf(Color.WHITE))

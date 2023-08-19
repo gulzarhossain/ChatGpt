@@ -1,5 +1,4 @@
 package com.project.chatgpt
-
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -15,7 +14,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DimenRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +23,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -34,22 +35,55 @@ import com.project.chatgpt.Model.ImageData
 import com.project.chatgpt.Utils.AppPreferences
 import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ActivityProfileBinding
-
-
 class Profile : AppCompatActivity() {
     lateinit var binding:ActivityProfileBinding
     lateinit var adapter: ProfileAdapter
     val list = ArrayList<ImageData>()
     lateinit var storageReference:StorageReference
     val myRef = Firebase.database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
-
+    var ch=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=DataBindingUtil.setContentView(this,R.layout.activity_profile)
         window.statusBarColor=Color.parseColor("#33000000")
 
-        binding.email.text=AppPreferences.getUserName(this)
-        binding.name.text=AppPreferences.getUserCode(this)
+        myRef.addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (sanp in snapshot.child("users").children){
+                    if (sanp.key.equals(intent.getStringExtra("ID"))){
+                        binding.email.text=sanp.child("email").value.toString()
+                        binding.name.text=sanp.child("name").value.toString()
+                        Glide.with(this@Profile).load(sanp.child("pic").value.toString()).listener(object :RequestListener<Drawable>{
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                binding.pbar.visibility=View.GONE
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                binding.pbar.visibility=View.GONE
+                                return false
+                            }
+                        }).into(binding.img)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
 
         storageReference=FirebaseStorage.getInstance().reference
 
@@ -77,7 +111,7 @@ class Profile : AppCompatActivity() {
             startActivity(Intent(this,Showcase::class.java))
         }
         binding.img.setOnClickListener {
-            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.S) {
                 pickImg.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }else{
                 if (checkAndRequestPermissions(this)) {
@@ -89,66 +123,34 @@ class Profile : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
             finish()
         }
+        if (!AppPreferences.getUserName(this@Profile).replace(".","").equals(intent.getStringExtra("ID"))){
+            binding.btupdate.visibility=View.GONE
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        storageReference.child(AppPreferences.getUserName(this@Profile).replace(".","")).listAll().addOnSuccessListener { it ->
+        ch=false
+        list.clear()
+        storageReference.child(intent.getStringExtra("ID").toString()).listAll().addOnSuccessListener { it ->
             if (it.items.size>0) {
-                if (it.items.size==1 && it.items[0].name.contains("profilepic")) {
-                    binding.pbar.visibility=View.VISIBLE
-                    it.items[0].downloadUrl.addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            Glide.with(this).load(it.result.toString()).listener(object :RequestListener<Drawable>{
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    binding.pbar.visibility=View.GONE
-                                    return false
-                                }
-
-                                override fun onResourceReady(
-                                    resource: Drawable?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    dataSource: DataSource?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    binding.pbar.visibility=View.GONE
-                                    return false
-                                }
-                            }).skipMemoryCache(true).into(binding.img)
-                        }
-                    }
-                    list.add(ImageData("",R.drawable.pose1))
-                    list.add(ImageData("",R.drawable.pose2))
-                    list.add(ImageData("",R.drawable.pose3))
-                    adapter.notifyDataSetChanged()
-                }else{
-                    binding.pbar.visibility=View.GONE
                     for (i in 0 until it.items.size) {
-                        if (it.items[i].name.contains("profilepic")){
-                            it.items[i].downloadUrl.addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Glide.with(this).load(it.result.toString()).skipMemoryCache(true).into(binding.img)
-                                }
-                            }
-                        }else {
-                            if (it.items[i].name.contains("Showcase ")){
+                            if (it.items[i].name.contains("Showcase")){
                                 it.items[i].downloadUrl.addOnCompleteListener {
                                     if (it.isSuccessful) {
+                                        ch=true
                                         list.add(ImageData(it.result.toString(), 0))
                                     }
                                     adapter.notifyDataSetChanged()
                                 }
+                            }else if (!ch && i==0){
+                                list.add(ImageData("",R.drawable.pose1))
+                                list.add(ImageData("",R.drawable.pose2))
+                                list.add(ImageData("",R.drawable.pose3))
+                                adapter.notifyDataSetChanged()
                             }
                         }
-                    }
-                }
-            }else{
+                    }else{
                 list.add(ImageData("",R.drawable.pose1))
                 list.add(ImageData("",R.drawable.pose2))
                 list.add(ImageData("",R.drawable.pose3))
@@ -186,11 +188,7 @@ class Profile : AppCompatActivity() {
             listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
         if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                context, listPermissionsNeeded
-                    .toTypedArray(),
-                111
-            )
+            permissn.launch(listPermissionsNeeded.toTypedArray())
             return false
         }
         return true
@@ -199,12 +197,12 @@ class Profile : AppCompatActivity() {
     val pickImg=registerForActivityResult(ActivityResultContracts.PickVisualMedia()){ uri ->
         if (uri!=null){
             binding.pbar.visibility=View.VISIBLE
-            storageReference.child(AppPreferences.getUserName(this@Profile).replace(".","")).child("profilepic").putFile(uri).addOnSuccessListener {
+            storageReference.child(intent.getStringExtra("ID").toString()).child("profilepic").putFile(uri).addOnSuccessListener {
                 it.storage.downloadUrl.addOnCompleteListener {
                     if (it.isSuccessful){
                         binding.pbar.visibility=View.GONE
                         myRef.child("users")
-                            .child(AppPreferences.getUserName(this@Profile).replace(".",""))
+                            .child(intent.getStringExtra("ID").toString())
                             .child("pic").setValue(it.result.toString())
                         Glide.with(this).load(it.result.toString()).skipMemoryCache(true).into(binding.img)
                     }
@@ -212,7 +210,19 @@ class Profile : AppCompatActivity() {
             }
         }
     }
-
+    val permissn=registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){it1->
+        var tr=0
+        var chek=true
+        it1.entries.forEach {
+            tr++
+            if (!it.value){
+                chek=false
+            }
+            if (tr==it1.size && chek){
+                pickImg.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        }
+    }
     class HorizontalMarginItemDecoration(context: Context, @DimenRes horizontalMarginInDp: Int) : RecyclerView.ItemDecoration() {
         private val horizontalMarginInPx: Int =
             context.resources.getDimension(horizontalMarginInDp).toInt()

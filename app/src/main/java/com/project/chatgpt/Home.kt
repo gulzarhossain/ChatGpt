@@ -20,6 +20,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.project.chatgpt.Adapters.FragmentAdapter
 import com.project.chatgpt.Fragments.ChatFragment
 import com.project.chatgpt.Fragments.FindFriends
@@ -36,6 +41,9 @@ class Home : AppCompatActivity() {
     lateinit var firebaseAuth: FirebaseAuth
 
     val list= listOf("Chat","Find Friends","Requests")
+
+    val myRef = Firebase.database.getReferenceFromUrl("https://chatgpt-5941d-default-rtdb.firebaseio.com/")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        binding=DataBindingUtil. setContentView(this,R.layout.activity_home)
@@ -134,9 +142,42 @@ class Home : AppCompatActivity() {
             pop.show()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (snap in snapshot.child("users").children) {
+                    if (snap.key.equals(AppPreferences.getUserName(this@Home).replace(".", ""))) {
+                        snap.ref.child("status").setValue("Online")
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
     fun ChangeTab(){
         binding.lytab.selectTab(binding.lytab.getTabAt(0))
         AppUtility.SnacView("Friend Added",binding.lytab)
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val time=System.currentTimeMillis()
+                for (snap in snapshot.child("users").children) {
+                    if (snap.key.equals(AppPreferences.getUserName(this@Home).replace(".", ""))) {
+                        snap.ref.child("status").setValue(time.toString())
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
 }

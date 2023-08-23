@@ -104,7 +104,6 @@ class MsgAdapter(val context: Context,val list:ArrayList<MsgData>):RecyclerView.
                     false
                 }
 
-
                 binding.lyimgown.setOnLongClickListener {
                     (context as Chat).popup(holder.adapterPosition, binding.msgown, true)
                     false

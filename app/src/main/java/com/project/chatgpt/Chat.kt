@@ -44,6 +44,7 @@ import com.project.chatgpt.Adapters.MsgAdapter
 import com.project.chatgpt.Model.MsgData
 import com.project.chatgpt.Model.UserData
 import com.project.chatgpt.Utils.AppPreferences
+import com.project.chatgpt.Utils.AppUtility
 import com.project.chatgpt.databinding.ActivityChatBinding
 
 class Chat : AppCompatActivity() {
@@ -79,6 +80,14 @@ class Chat : AppCompatActivity() {
 
         myRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child("users").child(userdata.name).child("status").value.toString().lowercase().contains(
+                            Regex("^[a-z]")))
+                    {
+                        binding.stat.text = snapshot.child("users").child(userdata.name)
+                            .child("status").value.toString()
+                }else binding.stat.text="last seen "+ AppUtility.setDate(snapshot.child("users").child(userdata.name)
+                        .child("status").value.toString()).lowercase()+" at "+AppUtility.convertTime(snapshot.child("users").child(userdata.name)
+                        .child("status").value.toString()).lowercase()
                     msglist.clear()
                     if (genchatkey.isEmpty()){
                         genchatkey="1"
@@ -170,10 +179,11 @@ class Chat : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+              myRef.child("users").child(AppPreferences.getUserName(this@Chat).replace(".", "")).child("status").setValue("Typing...")
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                myRef.child("users").child(AppPreferences.getUserName(this@Chat).replace(".", "")).child("status").setValue("Online")
                 binding.rvmsg.scrollToPosition(msglist.size-1)
                 if (p0.toString().isNotEmpty()){
                     binding.btcam.animation=AnimationUtils.loadAnimation(this@Chat, com.facebook.R.anim.abc_fade_out)
@@ -267,6 +277,15 @@ class Chat : AppCompatActivity() {
                 }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        myRef.child("users").child(AppPreferences.getUserName(this@Chat).replace(".", "")).child("status").setValue("Online")
+    }
+    override fun onPause() {
+        super.onPause()
+        val time=System.currentTimeMillis()
+        myRef.child("users").child(AppPreferences.getUserName(this@Chat).replace(".", "")).child("status").setValue(time.toString())
     }
     fun checkAndRequestPermissions(context: Activity?): Boolean {
         val cameraPermission = ContextCompat.checkSelfPermission(
